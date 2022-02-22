@@ -7,19 +7,18 @@ describe GildedRose do
     context 'with all known items' do
       before(:each) do
         @items = [
-          Item.new(name="+5 Dexterity Vest", sell_in=10, quality=20),
-          Item.new(name="Aged Brie", sell_in=2, quality=0),
-          Item.new(name="Elixir of the Mongoose", sell_in=5, quality=7),
-          Item.new(name="Sulfuras, Hand of Ragnaros", sell_in=0, quality=80),
-          Item.new(name="Sulfuras, Hand of Ragnaros", sell_in=-1, quality=80),
-          Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=15, quality=20),
-          Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=10, quality=49),
-          Item.new(name="Backstage passes to a TAFKAL80ETC concert", sell_in=5, quality=49),
-          Item.new(name="Conjured Mana Cake", sell_in=3, quality=6), # <-- :O
+          Item.new(name = '+5 Dexterity Vest', sell_in = 10, quality = 20),
+          Item.new(name = 'Aged Brie', sell_in = 2, quality = 0),
+          Item.new(name = 'Elixir of the Mongoose', sell_in = 5, quality = 7),
+          Item.new(name = 'Sulfuras, Hand of Ragnaros', sell_in = 0, quality = 80),
+          Item.new(name = 'Sulfuras, Hand of Ragnaros', sell_in = -1, quality = 80),
+          Item.new(name = 'Backstage passes to a TAFKAL80ETC concert', sell_in = 15, quality = 20),
+          Item.new(name = 'Backstage passes to a TAFKAL80ETC concert', sell_in = 10, quality = 49),
+          Item.new(name = 'Backstage passes to a TAFKAL80ETC concert', sell_in = 5, quality = 49),
+          Item.new(name = 'Conjured Mana Cake', sell_in = 3, quality = 6) # <-- :O
         ]
         @gilded_rose = described_class.new(@items)
       end
-
 
       it 'does not change the name and the order of items' do
         original_names = @items.map(&:name)
@@ -46,8 +45,8 @@ describe GildedRose do
     context 'with only normal items' do
       before(:each) do
         @normal_items = [
-          Item.new(name="+5 Dexterity Vest", sell_in=10, quality=20),
-          Item.new(name="Elixir of the Mongoose", sell_in=5, quality=7),
+          Item.new(name = '+5 Dexterity Vest', sell_in = 10, quality = 20),
+          Item.new(name = 'Elixir of the Mongoose', sell_in = 5, quality = 7)
         ]
         @gilded_rose = described_class.new(@normal_items)
       end
