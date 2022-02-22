@@ -1,0 +1,4 @@
+Lint/UselessAssignment:
+  Enabled: false
+Metrics/BlockLength:
+  IgnoredMethods: ['describe', 'context']
