@@ -4,6 +4,10 @@ source "https://rubygems.org"
 
 # gem "rails"
 
-gem "rspec", "~> 3.11"
+group :test, :development do
+    gem "rspec"
+    gem "guard-rspec"
+    gem "solargraph"
+end
 
-gem "guard-rspec", "~> 4.7"
+
