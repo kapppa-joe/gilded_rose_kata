@@ -13,7 +13,13 @@ class GildedRose
   def update_quality()
     @items.each do |item|
 
-      if self.class.detect_item_group(item) == :legendary
+      item_group = self.class.detect_item_group(item)
+
+      if item_group == :legendary
+        # do nothing
+        next
+      elsif item_group == :normal
+        degrade_normal_item(item)
         next
       end
 
@@ -69,6 +75,15 @@ class GildedRose
     end
 
     :normal
+  end
+
+  def degrade_normal_item(item)
+    if item.sell_in.positive?
+      item.quality = [0, item.quality - 1].max
+    else
+      item.quality = [0, item.quality - 2].max
+    end
+    item.sell_in -= 1
   end
 end
 
