@@ -124,7 +124,7 @@ describe GildedRose do
         @gilded_rose = GildedRose.new(@non_legendary_items)
       end
 
-      it 'ensure the quality of an item to never be more than 50' do
+      it 'ensure the quality of an item not to be more than 50' do
         50.times do
           @gilded_rose.update_quality
           expect(@non_legendary_items.map(&:quality)).to all(be <= 50)
@@ -133,7 +133,29 @@ describe GildedRose do
     end
 
     context 'with "Aged Brie"' do
-      it 'increases in Quality the older it gets'
+      before(:each) do
+        @aged_brie = [
+          Item.new(name = 'Aged Brie', sell_in = 2, quality = 0)
+        ]
+        @gilded_rose = GildedRose.new(@aged_brie)
+      end
+
+      it 'increases in Quality the older it gets' do
+        quality_on_0th_day = @aged_brie[0].quality
+
+        @gilded_rose.update_quality
+        expect(@aged_brie[0].quality).to eq quality_on_0th_day + 1
+
+        @gilded_rose.update_quality
+        expect(@aged_brie[0].quality).to eq quality_on_0th_day + 2
+      end
+
+      it 'ensure the quality of an item not to be more than 50' do
+        55.times do
+          @gilded_rose.update_quality
+        end
+        expect(@aged_brie[0].quality).to be <= 50
+      end
     end
 
     context 'with "Backstage passes"' do
