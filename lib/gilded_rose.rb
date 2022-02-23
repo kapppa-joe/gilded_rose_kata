@@ -6,6 +6,9 @@ class GildedRose
     /^Conjured.*/ => :conjured
   }
 
+  MAX_QUALITY = 50
+  MIN_QUALITY = 0
+
   def initialize(items)
     @items = items
   end
@@ -84,17 +87,25 @@ class GildedRose
 
   def degrade_normal_item(item)
     if item.sell_in.positive?
-      item.quality = [0, item.quality - 1].max
+      item.quality -= 1
     else
-      item.quality = [0, item.quality - 2].max
+      item.quality -= 2
+    end
+
+    if item.quality < MIN_QUALITY
+      item.quality = MIN_QUALITY
     end
   end
 
   def boost_item_quality(item)
     if item.sell_in.positive?
-      item.quality = [50, item.quality + 1].min
+      item.quality += 1
     else
-      item.quality = [50, item.quality + 2].min
+      item.quality += 2
+    end
+
+    if item.quality > MAX_QUALITY
+      item.quality = MAX_QUALITY
     end
   end
 
