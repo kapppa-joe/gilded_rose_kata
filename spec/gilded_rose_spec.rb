@@ -222,4 +222,11 @@ describe GildedRose do
       end
     end
   end
+
+  describe '#detect_item_group' do
+    it 'returns :legendary for item name starting with "Sulfuras"'
+    it 'returns :aged for item name "Aged Brie"'
+    it 'returns :backstage_pass for item name starting with "Backstage passes"'
+    it 'returns :conjured for item name starting with "Conjured"'
+  end
 end
