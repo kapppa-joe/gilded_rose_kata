@@ -16,15 +16,12 @@ class GildedRose
 
       if item_group == :legendary
         # do nothing
-        next
       elsif item_group == :normal
         degrade_normal_item(item)
         decrease_sell_in_day(item)
-        next
       elsif item_group == :aged
         boost_item_quality(item)
         decrease_sell_in_day(item)
-        next
       else
         original_update_quality_for_single_item(item)
       end
