@@ -1,4 +1,10 @@
 class GildedRose
+  ItemGroupMatchers = {
+    /^Sulfuras.*/ => :legendary,
+    /^Backstage passes.*/ => :backstage_pass,
+    /^Aged Brie$/ => :aged,
+    /^Conjured.*/ => :conjured
+  }
 
   def initialize(items)
     @items = items
@@ -53,17 +59,11 @@ class GildedRose
   end
 
   def self.detect_item_group(item)
-    if item.name.start_with? 'Sulfuras'
-      :legendary
-    elsif item.name.start_with? 'Backstage passes'
-      :backstage_pass
-    elsif item.name == 'Aged Brie'
-      :aged
-    elsif item.name.start_with? 'Conjured'
-      :conjured
-    else
-      :normal
+    ItemGroupMatchers.each do |pattern, group_name|
+      return group_name if item.name.match?(pattern)
     end
+
+    :normal
   end
 end
 
