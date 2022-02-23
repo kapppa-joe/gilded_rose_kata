@@ -51,6 +51,10 @@ class GildedRose
       end
     end
   end
+
+  def self.detect_item_group(item)
+    :legendary
+  end
 end
 
 class Item

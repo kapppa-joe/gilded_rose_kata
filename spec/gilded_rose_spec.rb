@@ -224,7 +224,13 @@ describe GildedRose do
   end
 
   describe '#detect_item_group' do
-    it 'returns :legendary for item name starting with "Sulfuras"'
+    it 'returns :legendary for item name starting with "Sulfuras"' do
+      item =
+        Item.new(name = 'Sulfuras, Hand of Ragnaros', sell_in = 0, quality = 80)
+      result = GildedRose.detect_item_group(item)
+      expect(result).to eq :legendary
+    end
+
     it 'returns :aged for item name "Aged Brie"'
     it 'returns :backstage_pass for item name starting with "Backstage passes"'
     it 'returns :conjured for item name starting with "Conjured"'
