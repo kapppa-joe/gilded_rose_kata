@@ -20,6 +20,11 @@ class GildedRose
         next
       elsif item_group == :normal
         degrade_normal_item(item)
+        decrease_sell_in_day(item)
+        next
+      elsif item_group == :aged
+        boost_item_quality(item)
+        decrease_sell_in_day(item)
         next
       end
 
@@ -83,6 +88,13 @@ class GildedRose
     else
       item.quality = [0, item.quality - 2].max
     end
+  end
+
+  def boost_item_quality(item)
+    item.quality = [50, item.quality + 1].min
+  end
+
+  def decrease_sell_in_day(item)
     item.sell_in -= 1
   end
 end
