@@ -1,5 +1,5 @@
 class GildedRose
-  ItemGroupMatchers = {
+  ITEM_GROUP_MATCHERS = {
     /^Sulfuras.*/ => :legendary,
     /^Backstage passes.*/ => :backstage_pass,
     /^Aged Brie$/ => :aged,
@@ -59,7 +59,7 @@ class GildedRose
   end
 
   def self.detect_item_group(item)
-    ItemGroupMatchers.each do |pattern, group_name|
+    ITEM_GROUP_MATCHERS.each do |pattern, group_name|
       return group_name if item.name.match?(pattern)
     end
 
