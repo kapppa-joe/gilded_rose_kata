@@ -53,7 +53,17 @@ class GildedRose
   end
 
   def self.detect_item_group(item)
-    :legendary
+    if item.name.start_with? 'Sulfuras'
+      :legendary
+    elsif item.name.start_with? 'Backstage passes'
+      :backstage_pass
+    elsif item.name == 'Aged Brie'
+      :aged
+    elsif item.name.start_with? 'Conjured'
+      :conjured
+    else
+      :normal
+    end
   end
 end
 
