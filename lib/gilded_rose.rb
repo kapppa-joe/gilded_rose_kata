@@ -14,17 +14,17 @@ class GildedRose
     @items.each do |item|
       item_group = self.class.detect_item_group(item)
 
-      if item_group == :legendary
-        # do nothing
-      elsif item_group == :normal
-        degrade_normal_item(item)
-        decrease_sell_in_day(item)
-      elsif item_group == :aged
-        boost_item_quality(item)
-        decrease_sell_in_day(item)
-      else
+      # if item_group == :legendary
+      #   # do nothing
+      # elsif item_group == :normal
+      #   degrade_normal_item(item)
+      #   decrease_sell_in_day(item)
+      # elsif item_group == :aged
+      #   boost_item_quality(item)
+      #   decrease_sell_in_day(item)
+      # else
         original_update_quality_for_single_item(item)
-      end
+      # end
     end
   end
 

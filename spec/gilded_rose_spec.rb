@@ -140,7 +140,7 @@ describe GildedRose do
         @gilded_rose = GildedRose.new(@aged_brie)
       end
 
-      it 'increases in Quality the older it gets' do
+      it 'increases in quality the older it gets' do
         quality_on_0th_day = @aged_brie[0].quality
 
         @gilded_rose.update_quality
@@ -148,6 +148,17 @@ describe GildedRose do
 
         @gilded_rose.update_quality
         expect(@aged_brie[0].quality).to eq quality_on_0th_day + 2
+      end
+
+      it 'increases in quality for twice as fast when sell by date has passed' do
+        quality_on_0th_day = @aged_brie[0].quality
+        @aged_brie[0].sell_in = 0
+
+        @gilded_rose.update_quality
+        expect(@aged_brie[0].quality).to eq quality_on_0th_day + 2
+
+        @gilded_rose.update_quality
+        expect(@aged_brie[0].quality).to eq quality_on_0th_day + 2 + 2
       end
 
       it 'ensures the quality of an item not to be more than 50' do
