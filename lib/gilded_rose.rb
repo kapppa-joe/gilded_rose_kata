@@ -113,14 +113,18 @@ class GildedRose
   end
 
   def adjust_backstage_pass_quality(item)
-    if item.sell_in > 10
-      item.quality += 1
-    elsif item.sell_in > 5
-      item.quality += 2
-    elsif item.sell_in.positive?
-      item.quality += 3
-    else
+    greater_than = proc { |a| proc { |b| b > a } }
+    less_than_or_equal = proc { |a| proc { |b| b <= a } }
+
+    case item.sell_in
+    when less_than_or_equal[0]
       item.quality = 0
+    when 1..5
+      item.quality += 3
+    when 6..10
+      item.quality += 2
+    when greater_than[10]
+      item.quality += 1
     end
 
     if item.quality > MAX_QUALITY
