@@ -206,6 +206,9 @@ describe GildedRose do
 
         @gilded_rose.update_quality
         expect(@backstage_pass[0].quality).to eq 0
+
+        @gilded_rose.update_quality
+        expect(@backstage_pass[0].quality).to eq 0
       end
 
       it 'ensure the quality of an item not to be more than 50' do
