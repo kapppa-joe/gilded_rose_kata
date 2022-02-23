@@ -34,7 +34,7 @@ describe GildedRose do
         expect(@items.size).to be number_of_items
       end
 
-      it 'never lower the quality of an item to negative' do
+      it 'does not lower the quality of an item to negative' do
         100.times do
           GildedRose.new(@items).update_quality
         end
@@ -97,7 +97,7 @@ describe GildedRose do
         @gilded_rose = GildedRose.new(@legendary_items)
       end
 
-      it 'do not change the sell_in and quality' do
+      it 'does not change the sell_in and quality' do
         sell_in_on_0th_day = @legendary_items.map(&:sell_in)
         quality_on_0th_day = @legendary_items.map(&:quality)
         10.times do
@@ -124,7 +124,7 @@ describe GildedRose do
         @gilded_rose = GildedRose.new(@non_legendary_items)
       end
 
-      it 'ensure the quality of an item not to be more than 50' do
+      it 'ensures the quality of an item not to be more than 50' do
         50.times do
           @gilded_rose.update_quality
           expect(@non_legendary_items.map(&:quality)).to all(be <= 50)
@@ -150,7 +150,7 @@ describe GildedRose do
         expect(@aged_brie[0].quality).to eq quality_on_0th_day + 2
       end
 
-      it 'ensure the quality of an item not to be more than 50' do
+      it 'ensures the quality of an item not to be more than 50' do
         55.times do
           @gilded_rose.update_quality
         end
@@ -175,7 +175,7 @@ describe GildedRose do
         expect(@backstage_pass[0].quality).to be quality_on_0th_day + 2
       end
 
-      it 'quality increases by 2 when there are 10 days or less' do
+      it 'increases the quality by 2 when there are 10 days or less' do
         quality_on_0th_day = @backstage_pass[0].quality
         @backstage_pass[0].sell_in = 10
 
@@ -186,7 +186,7 @@ describe GildedRose do
         expect(@backstage_pass[0].quality).to be quality_on_0th_day + 2 + 2
       end
 
-      it 'quality increases by 3 when there are 5 days or less' do
+      it 'increases the quality by 3 when there are 5 days or less' do
         quality_on_0th_day = @backstage_pass[0].quality
         @backstage_pass[0].sell_in = 5
 
@@ -197,7 +197,7 @@ describe GildedRose do
         expect(@backstage_pass[0].quality).to be quality_on_0th_day + 3 + 3
       end
 
-      it 'quality drops to 0 after the concert' do
+      it 'sets the quality to 0 when sell_in = 0 (aka after the concert)' do
         quality_on_0th_day = @backstage_pass[0].quality
         @backstage_pass[0].sell_in = 1
 
@@ -211,7 +211,7 @@ describe GildedRose do
         expect(@backstage_pass[0].quality).to eq 0
       end
 
-      it 'ensure the quality of an item not to be more than 50' do
+      it 'ensures the quality of an item not to be more than 50' do
         @backstage_pass[0].quality = 49
 
         @gilded_rose.update_quality
