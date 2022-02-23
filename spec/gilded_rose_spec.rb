@@ -110,7 +110,7 @@ describe GildedRose do
       end
     end
 
-    context 'with non-legendary items' do
+    context 'with all non-legendary items' do
       before(:each) do
         @non_legendary_items = [
           Item.new(name = '+5 Dexterity Vest', sell_in = 10, quality = 20),
@@ -159,10 +159,64 @@ describe GildedRose do
     end
 
     context 'with "Backstage passes"' do
-      it 'increases in quality as its sell_in value approaches'
-      it 'quality increases by 2 when there are 10 days or less'
-      it 'quality increases by 3 when there are 5 days or less'
-      it 'quality drops to 0 after the concert'
+      before(:each) do
+        @backstage_pass = [
+          Item.new(name = 'Backstage passes to a TAFKAL80ETC concert', sell_in = 15, quality = 20)
+        ]
+        @gilded_rose = GildedRose.new(@backstage_pass)
+      end
+      it 'increases in quality as its sell_in value approaches' do
+        quality_on_0th_day = @backstage_pass[0].quality
+
+        @gilded_rose.update_quality
+        expect(@backstage_pass[0].quality).to be quality_on_0th_day + 1
+
+        @gilded_rose.update_quality
+        expect(@backstage_pass[0].quality).to be quality_on_0th_day + 2
+      end
+
+      it 'quality increases by 2 when there are 10 days or less' do
+        quality_on_0th_day = @backstage_pass[0].quality
+        @backstage_pass[0].sell_in = 10
+
+        @gilded_rose.update_quality
+        expect(@backstage_pass[0].quality).to be quality_on_0th_day + 2
+
+        @gilded_rose.update_quality
+        expect(@backstage_pass[0].quality).to be quality_on_0th_day + 2 + 2
+      end
+
+      it 'quality increases by 3 when there are 5 days or less' do
+        quality_on_0th_day = @backstage_pass[0].quality
+        @backstage_pass[0].sell_in = 5
+
+        @gilded_rose.update_quality
+        expect(@backstage_pass[0].quality).to be quality_on_0th_day + 3
+
+        @gilded_rose.update_quality
+        expect(@backstage_pass[0].quality).to be quality_on_0th_day + 3 + 3
+      end
+
+      it 'quality drops to 0 after the concert' do
+        quality_on_0th_day = @backstage_pass[0].quality
+        @backstage_pass[0].sell_in = 1
+
+        @gilded_rose.update_quality
+        expect(@backstage_pass[0].quality).to be quality_on_0th_day + 3
+
+        @gilded_rose.update_quality
+        expect(@backstage_pass[0].quality).to eq 0
+      end
+
+      it 'ensure the quality of an item not to be more than 50' do
+        @backstage_pass[0].quality = 49
+
+        @gilded_rose.update_quality
+        expect(@backstage_pass[0].quality).to eq 50
+
+        @gilded_rose.update_quality
+        expect(@backstage_pass[0].quality).to eq 50
+      end
     end
   end
 end
