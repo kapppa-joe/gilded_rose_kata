@@ -25,6 +25,9 @@ class GildedRose
       elsif item_group == :aged
         boost_item_quality(item)
         decrease_sell_in_day(item)
+      elsif item_group == :backstage_pass
+        adjust_backstage_pass_quality(item)
+        decrease_sell_in_day(item)
       else
         original_update_quality_for_single_item(item)
       end
@@ -102,6 +105,22 @@ class GildedRose
       item.quality += 1
     else
       item.quality += 2
+    end
+
+    if item.quality > MAX_QUALITY
+      item.quality = MAX_QUALITY
+    end
+  end
+
+  def adjust_backstage_pass_quality(item)
+    if item.sell_in > 10
+      item.quality += 1
+    elsif item.sell_in > 5
+      item.quality += 2
+    elsif item.sell_in.positive?
+      item.quality += 3
+    else
+      item.quality = 0
     end
 
     if item.quality > MAX_QUALITY
