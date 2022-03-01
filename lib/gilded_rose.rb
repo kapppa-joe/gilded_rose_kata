@@ -15,70 +15,65 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
-      item_group = self.class.detect_item_group(item)
-
-      if item_group == :legendary
-        # do nothing
-      elsif item_group == :normal
+      case self.class.detect_item_group(item)
+      when :legendary
+        next  # do nothing
+      when :normal
         degrade_normal_item(item)
-        decrease_sell_in_day(item)
-      elsif item_group == :aged
+      when :aged
         boost_item_quality(item)
-        decrease_sell_in_day(item)
-      elsif item_group == :backstage_pass
+      when :backstage_pass
         adjust_backstage_pass_quality(item)
-        decrease_sell_in_day(item)
-      else
-        original_update_quality_for_single_item(item)
       end
+      decrease_sell_in_day(item)
     end
   end
 
-  def original_update_quality_for_single_item(item)
-    if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-      if item.quality > 0
-        if item.name != "Sulfuras, Hand of Ragnaros"
-          item.quality = item.quality - 1
-        end
-      end
-    else
-      if item.quality < 50
-        item.quality = item.quality + 1
-        if item.name == "Backstage passes to a TAFKAL80ETC concert"
-          if item.sell_in < 11
-            if item.quality < 50
-              item.quality = item.quality + 1
-            end
-          end
-          if item.sell_in < 6
-            if item.quality < 50
-              item.quality = item.quality + 1
-            end
-          end
-        end
-      end
-    end
-    if item.name != "Sulfuras, Hand of Ragnaros"
-      item.sell_in = item.sell_in - 1
-    end
-    if item.sell_in < 0
-      if item.name != "Aged Brie"
-        if item.name != "Backstage passes to a TAFKAL80ETC concert"
-          if item.quality > 0
-            if item.name != "Sulfuras, Hand of Ragnaros"
-              item.quality = item.quality - 1
-            end
-          end
-        else
-          item.quality = item.quality - item.quality
-        end
-      else
-        if item.quality < 50
-          item.quality = item.quality + 1
-        end
-      end
-    end
-  end
+  # def original_update_quality_for_single_item(item)
+  #   if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
+  #     if item.quality > 0
+  #       if item.name != "Sulfuras, Hand of Ragnaros"
+  #         item.quality = item.quality - 1
+  #       end
+  #     end
+  #   else
+  #     if item.quality < 50
+  #       item.quality = item.quality + 1
+  #       if item.name == "Backstage passes to a TAFKAL80ETC concert"
+  #         if item.sell_in < 11
+  #           if item.quality < 50
+  #             item.quality = item.quality + 1
+  #           end
+  #         end
+  #         if item.sell_in < 6
+  #           if item.quality < 50
+  #             item.quality = item.quality + 1
+  #           end
+  #         end
+  #       end
+  #     end
+  #   end
+  #   if item.name != "Sulfuras, Hand of Ragnaros"
+  #     item.sell_in = item.sell_in - 1
+  #   end
+  #   if item.sell_in < 0
+  #     if item.name != "Aged Brie"
+  #       if item.name != "Backstage passes to a TAFKAL80ETC concert"
+  #         if item.quality > 0
+  #           if item.name != "Sulfuras, Hand of Ragnaros"
+  #             item.quality = item.quality - 1
+  #           end
+  #         end
+  #       else
+  #         item.quality = item.quality - item.quality
+  #       end
+  #     else
+  #       if item.quality < 50
+  #         item.quality = item.quality + 1
+  #       end
+  #     end
+  #   end
+  # end
 
   def self.detect_item_group(item)
     ITEM_GROUP_MATCHERS.each do |pattern, group_name|
@@ -89,51 +84,40 @@ class GildedRose
   end
 
   def degrade_normal_item(item)
-    if item.sell_in.positive?
-      item.quality -= 1
-    else
-      item.quality -= 2
-    end
-
-    if item.quality < MIN_QUALITY
-      item.quality = MIN_QUALITY
-    end
+    change = item.sell_in.positive? ? -1 : -2
+    item.quality = calc_new_item_quality(item.quality, change)
   end
 
   def boost_item_quality(item)
-    if item.sell_in.positive?
-      item.quality += 1
-    else
-      item.quality += 2
-    end
-
-    if item.quality > MAX_QUALITY
-      item.quality = MAX_QUALITY
-    end
+    change = item.sell_in.positive? ? 1 : 2
+    item.quality = calc_new_item_quality(item.quality, change)
   end
 
   def adjust_backstage_pass_quality(item)
+    return item.quality = 0 if item.sell_in <= 0
+
     greater_than = proc { |a| proc { |b| b > a } }
-    less_than_or_equal = proc { |a| proc { |b| b <= a } }
 
     case item.sell_in
-    when less_than_or_equal[0]
-      item.quality = 0
     when 1..5
-      item.quality += 3
+      change = 3
     when 6..10
-      item.quality += 2
+      change = 2
     when greater_than[10]
-      item.quality += 1
+      change = 1
     end
 
-    if item.quality > MAX_QUALITY
-      item.quality = MAX_QUALITY
-    end
+    item.quality = calc_new_item_quality(item.quality, change)
   end
 
   def decrease_sell_in_day(item)
     item.sell_in -= 1
+  end
+
+  def calc_new_item_quality(original_quality, change)
+    new_quality = original_quality + change
+    new_quality = [new_quality, MAX_QUALITY].min
+    new_quality = [new_quality, MIN_QUALITY].max
   end
 end
 

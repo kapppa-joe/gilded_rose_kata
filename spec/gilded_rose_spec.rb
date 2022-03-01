@@ -284,4 +284,26 @@ describe GildedRose do
       end
     end
   end
+
+  describe '#calc_new_item_quality' do
+    let(:gilded_rose) { GildedRose.new([]) }
+
+    it 'when given 0 and 0, return 0' do
+      expect(gilded_rose.calc_new_item_quality(0, 0)).to eql 0
+    end
+
+    it 'when given two numbers, return their sum' do
+      expect(gilded_rose.calc_new_item_quality(5, 10)).to eql 15
+      expect(gilded_rose.calc_new_item_quality(10, -5)).to eql 5
+      expect(gilded_rose.calc_new_item_quality(13, 12)).to eql 25
+    end
+
+    it 'when the sum exceeds MAX_QUALITY, return MAX_QUALITY' do
+      expect(gilded_rose.calc_new_item_quality(100, 100)).to eql GildedRose::MAX_QUALITY
+    end
+
+    it 'when the sum is lower than MIN_QUALITY, return MIN_quality' do
+      expect(gilded_rose.calc_new_item_quality(1, -100)).to eql GildedRose::MIN_QUALITY
+    end
+  end
 end
