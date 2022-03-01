@@ -232,6 +232,33 @@ describe GildedRose do
         expect(@backstage_pass[0].quality).to eq 50
       end
     end
+
+    context 'with "Conjured items"' do
+      before(:each) do
+        @conjured_item = [
+          Item.new(name = 'Conjured Mana Cake', sell_in = 3, quality = 8)
+        ]
+        @gilded_rose = GildedRose.new(@conjured_item)
+      end
+
+      it 'decreases in quality by 2 when sell_in day is positive' do
+        quality_on_0th_day = @conjured_item[0].quality
+
+        @gilded_rose.update_quality
+        expect(@conjured_item[0].quality).to eql quality_on_0th_day - 2
+
+        @gilded_rose.update_quality
+        expect(@conjured_item[0].quality).to eql quality_on_0th_day - 2 - 2
+      end
+
+      it 'descreases in quality by 4 when sell_in day is zero or negative' do
+        quality_on_0th_day = @conjured_item[0].quality
+        @conjured_item[0].sell_in = 0
+
+        @gilded_rose.update_quality
+        expect(@conjured_item[0].quality).to eql quality_on_0th_day - 4
+      end
+    end
   end
 
   describe '#detect_item_group' do

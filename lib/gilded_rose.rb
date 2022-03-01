@@ -24,6 +24,10 @@ class GildedRose
         boost_item_quality(item)
       when :backstage_pass
         adjust_backstage_pass_quality(item)
+      when :conjured
+        change = -2
+        change = -4 if item.sell_in <= 0
+        item.quality = calc_new_item_quality(item.quality, change)
       end
 
       decrease_sell_in_day(item)
