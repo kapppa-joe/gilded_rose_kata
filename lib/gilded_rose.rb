@@ -20,14 +20,12 @@ class GildedRose
         next  # do nothing
       when :normal
         degrade_normal_item(item)
+      when :conjured
+        degrade_conjured_item(item)
       when :aged
         boost_item_quality(item)
       when :backstage_pass
         adjust_backstage_pass_quality(item)
-      when :conjured
-        change = -2
-        change = -4 if item.sell_in <= 0
-        item.quality = calc_new_item_quality(item.quality, change)
       end
 
       decrease_sell_in_day(item)
@@ -45,6 +43,37 @@ class GildedRose
   def degrade_normal_item(item)
     change = item.sell_in.positive? ? -1 : -2
     item.quality = calc_new_item_quality(item.quality, change)
+  end
+
+  def degrade_conjured_item(item)
+    change = item.sell_in.positive? ? -2 : -4
+    item.quality = calc_new_item_quality(item.quality, change)
+  end
+
+  def boost_item_quality(item)
+    change = item.sell_in.positive? ? 1 : 2
+    item.quality = calc_new_item_quality(item.quality, change)
+  end
+
+  def adjust_backstage_pass_quality(item)
+    return item.quality = 0 if item.sell_in <= 0
+
+    greater_than = proc { |a| proc { |b| b > a } }
+
+    case item.sell_in
+    when 1..5
+      change = 3
+    when 6..10
+      change = 2
+    when greater_than[10]
+      change = 1
+    end
+
+    item.quality = calc_new_item_quality(item.quality, change)
+  end
+
+  def decrease_sell_in_day(item)
+    item.sell_in -= 1
   end
 
   def boost_item_quality(item)
