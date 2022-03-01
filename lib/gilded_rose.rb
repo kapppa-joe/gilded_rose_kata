@@ -15,7 +15,7 @@ class GildedRose
 
   def update_quality
     @items.each do |item|
-      case self.class.detect_item_group(item)
+      case item_group_of(item)
       when :legendary
         next  # do nothing
       when :normal
@@ -32,7 +32,7 @@ class GildedRose
     end
   end
 
-  def self.detect_item_group(item)
+  def item_group_of(item)
     ITEM_GROUP_MATCHERS.each do |pattern, group_name|
       return group_name if item.name.match?(pattern)
     end

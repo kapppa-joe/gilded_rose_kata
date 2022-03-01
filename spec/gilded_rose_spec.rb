@@ -261,40 +261,41 @@ describe GildedRose do
     end
   end
 
-  describe '#detect_item_group' do
+  describe '#item_group_of' do
+    let(:gilded_rose) { GildedRose.new([]) }
     it 'returns :legendary for item name starting with "Sulfuras"' do
       item = Item.new(name = 'Sulfuras, Hand of Ragnaros', sell_in = 0, quality = 80)
-      result = GildedRose.detect_item_group(item)
+      result = gilded_rose.item_group_of(item)
       expect(result).to eq :legendary
 
       item = Item.new(name = 'Sulfuras', sell_in = 0, quality = 80)
-      result = GildedRose.detect_item_group(item)
+      result = gilded_rose.item_group_of(item)
       expect(result).to eq :legendary
     end
 
     it 'returns :aged for item name "Aged Brie"' do
       item = Item.new(name = 'Aged Brie', sell_in = 2, quality = 0)
-      result = GildedRose.detect_item_group(item)
+      result = gilded_rose.item_group_of(item)
       expect(result).to eq :aged
     end
 
     it 'returns :backstage_pass for item name starting with "Backstage passes"' do
       item = Item.new(name = 'Backstage passes to a TAFKAL80ETC concert', sell_in = 15, quality = 20)
-      result = GildedRose.detect_item_group(item)
+      result = gilded_rose.item_group_of(item)
       expect(result).to eq :backstage_pass
 
       item = Item.new(name = 'Backstage passes to a concert of some random mobs', sell_in = 15, quality = 20)
-      result = GildedRose.detect_item_group(item)
+      result = gilded_rose.item_group_of(item)
       expect(result).to eq :backstage_pass
     end
 
     it 'returns :conjured for item name starting with "Conjured"' do
       item = Item.new(name = 'Conjured Mana Cake', sell_in = 3, quality = 6) # <-- :O
-      result = GildedRose.detect_item_group(item)
+      result = gilded_rose.item_group_of(item)
       expect(result).to eq :conjured
 
       item = Item.new(name = 'Conjured Mama Bake', sell_in = 3, quality = 6) # <-- :O
-      result = GildedRose.detect_item_group(item)
+      result = gilded_rose.item_group_of(item)
       expect(result).to eq :conjured
     end
 
@@ -306,7 +307,7 @@ describe GildedRose do
       ]
 
       normal_items.each do |item|
-        result = GildedRose.detect_item_group(item)
+        result = gilded_rose.item_group_of(item)
         expect(result).to eq :normal
       end
     end
